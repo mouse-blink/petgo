@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "chart.fullname" . }}-test-connection"
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: pet-go-test
+      image: "{{ .Values.testImage.repository }}:{{ .Values.testImage.tag | default .Chart.AppVersion }}"
+      env:
+        - name: BASE_URL
+          value: "http://{{ include "chart.fullname" . }}:8080"
+  restartPolicy: Never

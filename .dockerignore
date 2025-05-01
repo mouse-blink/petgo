@@ -1,0 +1,8 @@
+.gitignore
+.git
+chart
+docs
+README.md
+skaffold.yaml
+Dockerfile
+*.Dockerfile

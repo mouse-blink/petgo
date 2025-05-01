@@ -1,0 +1,29 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: petgo
+build:
+  local:
+    push: false
+  artifacts:
+    - image: pet-go
+      context: .
+      docker:
+        dockerfile: Dockerfile
+    - image: pet-go-test
+      context: .
+      docker:
+        dockerfile: test.Dockerfile
+deploy:
+  helm:
+    releases:
+      - name: pet-go-release
+        chartPath: chart
+        valuesFiles:
+          - chart/values.yaml
+        version: 0.1.0
+        setValueTemplates:
+          image.repository: "{{.IMAGE_REPO_pet_go}}"
+          image.tag: "{{.IMAGE_TAG_pet_go}}"
+          testImage.repository: "{{.IMAGE_REPO_pet_go_test}}"
+          testImage.tag: "{{.IMAGE_TAG_pet_go_test}}"
